@@ -1,8 +1,11 @@
 import express from 'express'
 import config from 'config'
 import mongoose from 'mongoose'
+import authRoutes from './routes/auth.routes.js'
 
 const app = express()
+
+app.use('/api/auth', authRoutes)
 
 const PORT = config.get('port') || 5000
 

@@ -1,4 +1,5 @@
 {
     "port": 5000,
-    "mongoUri": "mongodb+srv://timastepanov65_db_user:dmPtmN3SfsKN2Db8@cluster0.dbkffuo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+    "mongoUri": "mongodb+srv://timastepanov65_db_user:dmPtmN3SfsKN2Db8@cluster0.dbkffuo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+    "jvtSecret": "supersecretsecret"
 }
