@@ -1,0 +1,33 @@
+{
+  "name": "campuslink",
+  "version": "1.0.0",
+  "description": "Centralized platform for finding temporary employment and internships on campus.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "server": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dr0ken/CampusLink.git"
+  },
+  "keywords": [
+    "mern",
+    "react"
+  ],
+  "author": "Stepanov Timofey",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dr0ken/CampusLink/issues"
+  },
+  "homepage": "https://github.com/dr0ken/CampusLink#readme",
+  "dependencies": {
+    "config": "^4.1.1",
+    "express": "^5.1.0",
+    "mongoose": "^8.18.1"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "nodemon": "^3.1.10"
+  }
+}
