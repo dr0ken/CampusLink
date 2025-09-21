@@ -1,16 +1,24 @@
-import { useState } from 'react'
-import 'materialize-css'
+import {Routes, Route, Navigate} from "react-router"
+import HomePage from "./pages/HomePage"
+import AuthPage from "./pages/AuthPage"
+import ProtectedRoute from './context/ProtectedRoute'
+import AuthorizedPage from "./pages/AuthorizedPage"
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = () => {
   return (
-
-      <div className='container'>
-        <h1>Hello</h1>
-      </div>
-
-  )
+    <div data-theme="forest">
+      <Routes>
+        <Route path="/" element={<HomePage/>} />
+        <Route path="/auth" exact element={<AuthPage/>} />
+        <Route path="/authorized" exact element={
+          <ProtectedRoute>
+            <AuthorizedPage />
+          </ProtectedRoute>
+        }/>
+        <Route path="*" element={<Navigate to="/"/>}/>
+      </Routes>
+    </div>
+  );
 }
 
 export default App
