@@ -18,8 +18,6 @@ router.post(
 
     try 
     {
-        console.log("body:", req.body)
-
         const errors = validationResult(req)
 
         if (!errors.isEmpty()) {
@@ -52,7 +50,7 @@ router.post(
 
 // /api/auth/login
 router.post(
-    '/register',
+    '/login',
     [
         check('email', 'Некорректный email').normalizeEmail().isEmail(),
         check('password', 'Некорректный пароль').exists()
@@ -61,6 +59,7 @@ router.post(
         
     try 
     {
+
         const errors = validationResult(req)
 
         if (!errors.isEmpty()) {

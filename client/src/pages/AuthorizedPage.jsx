@@ -1,6 +1,6 @@
 const AuthorizedPage = () => {
     return (
-      <div>
+      <div className="flex justify-center h-full">
         <h1>Authorized Page</h1>
       </div>
     )

@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { toast } from "react-hot-toast";
+
 
 export const useHttp = () => {
   const [loading, setLoading] = useState(false)
@@ -28,12 +28,11 @@ export const useHttp = () => {
     {
       setLoading(false)
       setError(e.message)
-      toast.error(e.message)
       throw e
     }
   }, [])
   
-  const clearError = () => setError(null)
+  const clearError = useCallback(() => setError(null), [error]) 
 
   return {loading, request, error, clearError}
 }

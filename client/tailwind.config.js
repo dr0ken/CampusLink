@@ -11,6 +11,6 @@ export default {
   },
   plugins: [require('@tailwindcss/typography'), daisyui],
   daisyui:{
-    themes: ["pastel"],
+    themes: ["forest"],
   }
 }
