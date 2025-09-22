@@ -3,7 +3,7 @@ import { createContext } from "react";
 export const userContext = createContext()
 
 const ContextProvider = ({children}) => {
-  const authenticated = true;
+  const authenticated = false;
 
   return (
     <userContext.Provider value={{authenticated}}>

@@ -4,6 +4,7 @@ import config from 'config'
 import jwt from 'jsonwebtoken'
 import { check, validationResult } from 'express-validator'
 import User from '../models/User.js'
+import bodyParser from 'body-parser'
 const router = Router()
 
 // /api/auth/register
@@ -17,6 +18,8 @@ router.post(
 
     try 
     {
+        console.log("body:", req.body)
+
         const errors = validationResult(req)
 
         if (!errors.isEmpty()) {
@@ -31,7 +34,7 @@ router.post(
         const candidate = await User.findOne({email})
 
         if (candidate) {
-            res.status(400).json({'message': 'Такой пользователь уже существует'})
+            return res.status(400).json({'message': 'Такой пользователь уже существует'})
         }
 
         const hashedPassword = await bcrypt.hash(password, 12)
@@ -39,11 +42,11 @@ router.post(
 
         await user.save()
 
-        res.status(201).json({message: 'Пользователь создан'})
+        return res.status(201).json({message: 'Пользователь создан'})
     }
     catch (e) 
     {
-        res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова'})
+        return res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова'})
     }
 })
 

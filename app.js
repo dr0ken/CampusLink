@@ -2,13 +2,15 @@ import express from 'express'
 import config from 'config'
 import mongoose from 'mongoose'
 import authRoutes from './routes/auth.routes.js'
+import bodyParser from 'body-parser'
 
 const app = express()
+
+app.use(bodyParser.json())
 
 app.use('/api/auth', authRoutes)
 
 const PORT = config.get('port') || 5000
-
 
 async function start() 
 {
