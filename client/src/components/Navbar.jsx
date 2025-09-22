@@ -1,6 +1,8 @@
 import { useContext } from "react"
 import { NavLink, useNavigate } from "react-router"
 import { AuthContext } from "../context/AuthContext"
+import { Share2 } from "lucide-react"
+
 
 export const Navbar = () => {
 
@@ -16,12 +18,12 @@ export const Navbar = () => {
   return (
     <div className="navbar bg-base-100">
       <div className="flex-1">
-        <NavLink to="/" className="btn btn-ghost text-xl">CampusLink</NavLink>
+        <NavLink to="/" className="btn btn-ghost glass text-xl"><Share2 />CampusLink</NavLink>
       </div>
       <div className="flex-none">
         <ul>
-          <li className="btn btn-ghost"><NavLink to="/authorized">Authorized</NavLink></li>
-          <button className="btn btn-ghost" onClick={logoutHandler}>Logout</button>
+          <li className="btn btn-primary mx-2 glass"><NavLink to="/authorized">Authorized</NavLink></li>
+          <button className="btn btn-secondary glass" onClick={logoutHandler}>Logout</button>
         </ul>
       </div>
     </div>
