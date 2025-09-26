@@ -1,6 +1,6 @@
 import {Routes, Route, Navigate} from "react-router"
 import HomePage from "./pages/HomePage"
-import AuthPage from "./pages/AuthPage"
+import LoginPage from "./pages/LoginPage"
 import AuthorizedPage from "./pages/AuthorizedPage"
 import { useAuth } from "./hooks/auth.hook"
 import { AuthContext } from "./context/AuthContext"
@@ -19,11 +19,11 @@ const App = () => {
 
   return (
     <AuthContext.Provider value={{token, login, logout, userId, isAuthenticated}}>
-      <div className="bg-base-300 flex flex-col min-h-screen">
+      <div className="bg-base-300 flex flex-col min-h-screen" data-theme="cupcake">
         {isAuthenticated && <Navbar />}
         <Routes>
           <Route path="/" element={<HomePage/>} />
-          <Route path="/auth" exact element={<AuthPage/>} />
+          <Route path="/login" exact element={<LoginPage/>} />
           <Route element={<ProtectedRoutes/>}>
             <Route path="/authorized" exact element={<AuthorizedPage/>} />
           </Route>

@@ -2,6 +2,6 @@
   "workbench.colorTheme": "One Dark Pro",
   "workbench.iconTheme": "material-icon-theme",
   "workbench.tree.indent": 10,
-  "window.zoomLevel": 1,
+  "window.zoomLevel": 0.5,
   "editor.mouseWheelZoom": true
 }

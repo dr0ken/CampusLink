@@ -12,7 +12,7 @@ export const Navbar = () => {
   const logoutHandler = event => {
     event.preventDefault()
     auth.logout()
-    navigate('/auth')
+    navigate('/login')
   }
 
   return (
@@ -22,8 +22,8 @@ export const Navbar = () => {
       </div>
       <div className="flex-none">
         <ul>
-          <li className="btn btn-primary mx-2 glass"><NavLink to="/authorized">Authorized</NavLink></li>
-          <button className="btn btn-secondary glass" onClick={logoutHandler}>Logout</button>
+          <li className="btn btn-primary mx-2"><NavLink to="/authorized">Authorized</NavLink></li>
+          <button className="btn btn-secondary" onClick={logoutHandler}>Logout</button>
         </ul>
       </div>
     </div>
