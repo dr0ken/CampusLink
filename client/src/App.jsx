@@ -7,6 +7,7 @@ import { AuthContext } from "./context/AuthContext"
 import ProtectedRoutes from "./pages/ProtectedRoutes"
 import { Loader } from "./components/Loader"
 import { Navbar } from "./components/Navbar"
+import RegisterPage from "./pages/RegisterPage"
 
 const App = () => {
 
@@ -19,11 +20,12 @@ const App = () => {
 
   return (
     <AuthContext.Provider value={{token, login, logout, userId, isAuthenticated}}>
-      <div className="bg-base-300 flex flex-col min-h-screen" data-theme="cupcake">
+      <div className="bg-base-300 flex flex-col min-h-screen">
         {isAuthenticated && <Navbar />}
         <Routes>
           <Route path="/" element={<HomePage/>} />
           <Route path="/login" exact element={<LoginPage/>} />
+          <Route path="/register" exact element={<RegisterPage/>} />
           <Route element={<ProtectedRoutes/>}>
             <Route path="/authorized" exact element={<AuthorizedPage/>} />
           </Route>

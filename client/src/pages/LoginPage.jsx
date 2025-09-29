@@ -36,18 +36,6 @@ const LoginPage = () => {
     }
   }, [error])
 
-  const registerHandler = async (event) => {
-    event.preventDefault();
-    try {
-      await request(
-        '/api/auth/register',
-        'POST',
-        {...form})
-      loginHandler()
-    }
-    catch (error) {}
-  }
-
   const loginHandler = async (event) => {
     event.preventDefault();
     try {
@@ -59,6 +47,7 @@ const LoginPage = () => {
     }
     catch (e) {}
   } 
+
 
   return (
     <div className="flex justify-center items-center flex-1">
@@ -97,21 +86,14 @@ const LoginPage = () => {
             </p>
             <div className="card-actions justify-around w-full my-2">
               <button 
-                className="btn btn-primary flex-grow"
+                className="btn btn-primary grow"
                 disabled={loading}
                 type="submit">
                   Войти</button>
-              {/* <button 
-                className="btn btn-accent flex-grow" 
-                disabled={loading}
-                type="submit">
-                  Зарегистрироваться</button> */}
             </div>
           </form>
-          
+          <p>Нет аккаунта? <button className="link link-primary" onClick={ () => {navigate("/register")}}>Регистрация</button></p>
         </div>
-        
-        
       </div>        
     </div>
   )

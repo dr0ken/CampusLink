@@ -18,7 +18,7 @@ export const Navbar = () => {
   return (
     <div className="navbar bg-base-100">
       <div className="flex-1">
-        <NavLink to="/" className="btn btn-ghost glass text-xl"><Share2 />CampusLink</NavLink>
+        <NavLink to="/" className="btn btn-ghost glass text-xl" viewTransition><Share2 />CampusLink</NavLink>
       </div>
       <div className="flex-none">
         <ul>
