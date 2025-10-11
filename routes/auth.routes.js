@@ -10,6 +10,7 @@ import Employer from '../models/Employer.js'
 const router = Router()
 
 const roles = ['employer', 'student']
+const employerTypes = ['partner', 'teacher']
 
 // /api/auth/register
 router.post(
@@ -18,9 +19,16 @@ router.post(
     check('role', 'Некорректный тип аккаунта').isIn(roles),
     check('password', 'Пароль должен содержать не менее 8 символов, включая 1 цифру, 1 строчную и 1 заглавную букву')
       .matches('(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}'),
-    check('email', 'Некорректный email').isEmail(),
+    check('email', 'Некорректный email').normalizeEmail().isEmail(),
     check('name', 'Минимальная длина имени 4 символа').isLength({ min: 4 }),
+
+    //student
     check('group', 'Введите академическую группу').if(check('role').equals('student')).notEmpty(),
+
+    //employer
+    check('employerType', 'Некорректный тип работодателя').if(check('role').equals('employer')).isIn(employerTypes),
+
+    //partner
     check('organization', 'Введите название организации')
       .if(check('role').equals('employer') && check('employerType').equals('partner'))
         .notEmpty(),
@@ -32,10 +40,7 @@ router.post(
 
   try 
   {
-    console.log(req.body)
     const errors = validationResult(req)
-
-    console.log(errors)
 
     if (!errors.isEmpty()) {
       return res.status(400).json({
@@ -97,6 +102,8 @@ router.post(
 
     const {email, password} = req.body
 
+    console.log(email)
+
     const user = await User.findOne({email})
 
     if (!user) {
@@ -111,7 +118,7 @@ router.post(
 
     const token = jwt.sign(
       { userId: user.id },
-      config.get('jvtSecret'),
+      process.env.JVT_SECRET,
       { expiresIn: '1h' }
     )
     res.json({ token, userId: user.id})
