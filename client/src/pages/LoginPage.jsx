@@ -14,7 +14,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (auth.isAuthenticated) {
-      navigate('/')
+      navigate('/authorized')
       return
     }
   }, [auth])

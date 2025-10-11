@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 @plugin "daisyui" {
-  themes: light --default, halloween --prefersdark;
+  themes: winter --default, halloween --prefersdark;
 }
 
 @layer base {
@@ -12,6 +12,20 @@
   ::file-selector-button {
     border-color: var(--color-gray-200, currentcolor);
   }
+}
+
+@layer base {
+  @font-face {
+    font-family: "Montserrat";
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: optional;
+    src: url(/fonts/Montserrat.ttf) format("ttf");
+  }
+}
+
+@theme {
+  --font-display: "Montserrat", sans-serif; 
 }
 
 input:-webkit-autofill,

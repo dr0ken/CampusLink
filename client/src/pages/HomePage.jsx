@@ -1,8 +1,38 @@
+import { Share2 } from "lucide-react";
+import { useContext, useEffect } from "react";
+import { useNavigate } from "react-router";
+import { AuthContext } from "../context/AuthContext";
+
 const HomePage = () => {
-    return (
-      <div>
-        <h1>Home Page</h1>
+
+  const navigate = useNavigate()
+
+  const auth = useContext(AuthContext)
+
+  useEffect(() => {
+      if (auth.isAuthenticated) {
+        navigate('/authorized')
+        return
+      }
+    }, [auth])
+
+  return (
+    <div className="flex grow max-w-[100vw] items-center justify-between px-20">
+      <div className="hero flex-col justify-center items-center">
+        <div className="hero-content flex-col items-center gap-10 text-neutral text-center">
+          <h1 className="text-7xl font-bold text-shadow-xs">
+            Все возможности<br /><span className="text-primary">У тебя в руках</span>
+          </h1>
+          <p className="text-xl">
+            Найди работу, стажировку или исследовательский проект в своем кампусе.
+          </p>
+          <div className="w-full flex justify-end gap-2">
+            <button className="grow btn btn-primary btn-xl" onClick={ () => {navigate("/login") } }>Смотреть вакансии</button>
+            <button className="grow btn btn-primary btn-xl" onClick={ () => {navigate("/login") } }>Создать вакансию</button>
+          </div>
+        </div>
       </div>
-    )
+    </div>
+  )
 }
 export default HomePage;

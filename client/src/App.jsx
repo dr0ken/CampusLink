@@ -20,7 +20,7 @@ const App = () => {
 
   return (
     <AuthContext.Provider value={{token, login, logout, userId, isAuthenticated}}>
-      <div className="bg-base-300 flex flex-col min-h-screen">
+      <div className="bg-radial from-base-100 to-base-300 flex flex-col min-h-screen font-display">
         {isAuthenticated && <Navbar />}
         <Routes>
           <Route path="/" element={<HomePage/>} />

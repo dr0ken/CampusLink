@@ -1,10 +1,8 @@
 import {Router} from 'express'
 import bcrypt from 'bcryptjs'
-import config from 'config'
 import jwt from 'jsonwebtoken'
 import { check, validationResult } from 'express-validator'
 import User from '../models/User.js'
-import bodyParser from 'body-parser'
 import Student from '../models/Student.js'
 import Employer from '../models/Employer.js'
 const router = Router()
@@ -18,7 +16,7 @@ router.post(
   [
     check('role', 'Некорректный тип аккаунта').isIn(roles),
     check('password', 'Пароль должен содержать не менее 8 символов, включая 1 цифру, 1 строчную и 1 заглавную букву')
-      .matches('(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}'),
+      .matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/),
     check('email', 'Некорректный email').normalizeEmail().isEmail(),
     check('name', 'Минимальная длина имени 4 символа').isLength({ min: 4 }),
 
@@ -40,6 +38,8 @@ router.post(
 
   try 
   {
+
+    
     const errors = validationResult(req)
 
     if (!errors.isEmpty()) {
@@ -51,25 +51,44 @@ router.post(
 
     const {email, password, name, role, group, employerType, organization, job} = req.body
 
+    console.log(password)
+
     const candidate = await User.findOne({email})
 
     if (candidate) {
       return res.status(400).json({'message': 'Такой пользователь уже существует'})
     }
 
-    const hashedPassword = await bcrypt.hash(password, 12)
-    const user = new User({email:email, password: hashedPassword, role: role})
 
-    await user.save()
+    let profile;
 
     if (role == "student") {
-      const student = new Student({email:email, name:name, group:group})
-      student.save()
+      profile = new Student({
+        email:email,
+        name:name,
+        group:group})
     }
     else {
-      const employer = new Employer({email:email, name:name, employerType:employerType, organization:organization, job:job})
-      employer.save()
+      profile = new Employer({
+        email:email,
+        name:name,
+        employerType:employerType,
+        organization:organization,
+        job:job})
     }
+
+    const hashedPassword = await bcrypt.hash(password, 12)
+
+    const user = new User({
+      email:email,
+      password:hashedPassword,
+      role:role,
+      profile: profile._id})
+
+    profile.user = user._id
+
+    await profile.save()
+    await user.save()
 
     return res.status(201).json({message: 'Пользователь создан'})
   }
@@ -117,11 +136,11 @@ router.post(
     }
 
     const token = jwt.sign(
-      { userId: user.id },
-      process.env.JVT_SECRET,
+      { user: { id: user.id } },
+      process.env.JWT_SECRET,
       { expiresIn: '1h' }
     )
-    res.json({ token, userId: user.id})
+    res.json({ token })
   }
   catch (e) 
   {
