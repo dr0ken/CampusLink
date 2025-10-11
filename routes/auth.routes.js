@@ -5,6 +5,8 @@ import jwt from 'jsonwebtoken'
 import { check, validationResult } from 'express-validator'
 import User from '../models/User.js'
 import bodyParser from 'body-parser'
+import Student from '../models/Student.js'
+import Employer from '../models/Employer.js'
 const router = Router()
 
 const roles = ['employer', 'student']
@@ -54,6 +56,15 @@ router.post(
     const user = new User({email:email, password: hashedPassword, role: role})
 
     await user.save()
+
+    if (role == "student") {
+      const student = new Student({email:email, name:name, group:group})
+      student.save()
+    }
+    else {
+      const employer = new Employer({email:email, name:name, employerType:employerType, organization:organization, job:job})
+      employer.save()
+    }
 
     return res.status(201).json({message: 'Пользователь создан'})
   }
