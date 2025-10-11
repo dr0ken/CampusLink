@@ -30,7 +30,6 @@ const RegisterPage = () => {
 
   const {register, handleSubmit, watch} = useForm()
 
-
   const registerHandler = async (data) => {
     console.log(JSON.stringify(data))
     try {
@@ -78,6 +77,7 @@ const RegisterPage = () => {
                 {...register("name")}
                 type="text" 
                 required
+                minLength={4}
                 placeholder="Имя" 
               />
             </label>
@@ -95,7 +95,6 @@ const RegisterPage = () => {
                   </label>
                 </div>
               )
-              
             }
             {
               role == "employer" && (
@@ -162,9 +161,8 @@ const RegisterPage = () => {
                 required 
                 placeholder="Пароль"
                 autoComplete="on"
-                // minLength="8" 
-                // pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" 
-                title="Must be more than 8 characters, including number, lowercase letter, uppercase letter" />
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" 
+                title="Пароль должен содержать не менее 8 символов, включая 1 цифру, 1 строчную и 1 заглавную букву" />
             </label>
             <div className="card-actions justify-around w-full my-2">
               <button 

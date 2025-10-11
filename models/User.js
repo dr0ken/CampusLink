@@ -1,10 +1,10 @@
-import { Schema, model, Types } from "mongoose"; 
+import { Schema, model } from "mongoose"; 
 
 
 const schema = new Schema({
     email: {type: String, required: true, unique: true},
     password: {type: String, required: true},
-    test: [{type: Types.ObjectId, ref: 'Test'}]
+    role: {type: String, enum: ["student", "employer"], default: 'student', required: true}
 })
 
 
