@@ -2,6 +2,8 @@ import express from 'express'
 import mongoose from 'mongoose'
 import authRoutes from './routes/auth.routes.js'
 import profileRoutes from './routes/profile.routes.js'
+import vacancyRoutes from './routes/vacancy.routes.js'
+import submissionRoutes from './routes/submission.routes.js'
 import bodyParser from 'body-parser'
 import dotenv from 'dotenv'
 
@@ -13,6 +15,8 @@ app.use(bodyParser.json())
 
 app.use('/api/auth', authRoutes)
 app.use('/api/profile', profileRoutes)
+app.use('/api/vacancy', vacancyRoutes)
+app.use('/api/submission', submissionRoutes)
 
 const PORT = process.env.PORT || 5000
 
