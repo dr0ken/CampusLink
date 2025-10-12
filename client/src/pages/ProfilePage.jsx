@@ -1,16 +1,24 @@
 import { Mail, KeyRound, Users, User, BriefcaseBusiness, Building2  } from "lucide-react";
 import { useHttp } from "../hooks/http.hook";
 import { useForm } from "react-hook-form";
-import { useEffect, useContext, use } from "react";
+import { useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loading } from "../components/Loading";
+import { toast } from "react-hot-toast";
 
 const ProfilePage = () => {
 
   const {loading, error, clearError, request} = useHttp()
 
-  const getUserData = async () => {
+  useEffect(() => {
+      if (error) {
+        toast.error(error)
+        clearError()
+      }
+    }, [error])
+
+  const getUserProfile = async () => {
     try {      
       return await request(
         '/api/profile/me',
@@ -19,45 +27,67 @@ const ProfilePage = () => {
         {"x-auth-token": auth.token})
     } 
     catch (e) {
-      console.log(e.message)
+      toast(e.message)
+      return null
+    }
+  }
+  const editUserProfile = async (data) => 
+  {
+    try {
+      const response = await request(
+        '/api/profile/edit',
+        'PUT',
+        data,
+        {"x-auth-token": auth.token})
+      return response
+    }
+    catch (error) {
+      toast(e.message)
       return null
     }
   }
 
-  const query = useQuery({ queryKey: ['profile'], queryFn: getUserData })
+  const queryClient = useQueryClient()
 
-  const {register, handleSubmit, watch} = useForm()
+  const query = useQuery({ queryKey: ['profile'], queryFn: getUserProfile })
+
+  const mutation = useMutation({
+    mutationFn: editUserProfile,
+    onSuccess: (data) => {
+      queryClient.setQueryData(['profile'], data)
+    },
+  })
+
+  const {register, handleSubmit} = useForm()
 
   const auth = useContext(AuthContext)
 
-  const profileEditHandler = async (data) => 
-  {
-
+  const profileEditHandler = (data) => {
+    mutation.mutate(data)
   }
+  
 
-  if (query.status == 'pending') return <Loading />
-
-  const userData = query.data
+  if (query.isPending) return <Loading />
 
   let role;
 
-  if (userData.role == "student") role = "Студент"
-  else if (userData.profile.employerType == "partner") role = "Партнер"
+  if (query.data.role == "student") role = "Студент"
+  else if (query.data.profile.employerType == "partner") role = "Партнер"
   else role = "Преподаватель"
 
   return (
     <div className="flex grow max-w-[100vw] items-center justify-center">
       <div className="card w-96 bg-base-100 shadow-xl">
         <div className="card-body items-center">
-          <h2 className="card-title">
-            {userData.profile.name}
-            <span className="badge badge-primary">{role}</span>
-          </h2>
-          <div className="avatar avatar-placeholder">
+          <h2 className="card-title">{query.data.profile.name}</h2>
+          
+          <div className="avatar avatar-placeholder flex-col items-center">
               <div className="bg-neutral text-neutral-content size-32 rounded-full">
-                <span className="text-6xl">{userData.profile.name[0]}</span>
+                <span className="text-6xl">{query.data.profile.name[0]}</span>
               </div>
+              <span className="badge badge-primary transform -translate-y-1/2">{role}</span>
           </div>
+          
 
           <div className="w-full flex gap-10">
             
@@ -69,13 +99,13 @@ const ProfilePage = () => {
                 <input 
                   {...register("name")}
                   type="text" 
-                  defaultValue={userData.profile.name}
+                  defaultValue={query.data.profile.name}
                   required
                   minLength={4}
                   placeholder="Имя" 
                 />
               </label>
-              { userData.role == "student" && (
+              { query.data.role == "student" && (
                 <label className="floating-label input input-bordered my-1 w-full validator">
                   <span>Академическая группа</span>
                   <Users className="h-[1em] opacity-50" />
@@ -83,12 +113,12 @@ const ProfilePage = () => {
                     {...register("group")}
                     type="text" 
                     required
-                    defaultValue={userData.profile.group}
+                    defaultValue={query.data.profile.group}
                     placeholder="Академическая группа" 
                   />
                 </label>
               )}
-              {(userData.role == "employer" && userData.profile.employerType == "partner") && (
+              {(query.data.role == "employer" && query.data.profile.employerType == "partner") && (
                   <div className="flex flex-col w-full">
                     {/* organization */}
                     <label className="floating-label input input-bordered my-1 w-full validator">
@@ -97,7 +127,7 @@ const ProfilePage = () => {
                       <input 
                         {...register("organization")}
                         type="text" 
-                        defaultValue={userData.profile.organization}
+                        defaultValue={query.data.profile.organization}
                         required
                         placeholder="Название организации" 
                       />
@@ -108,7 +138,7 @@ const ProfilePage = () => {
                       <BriefcaseBusiness className="h-[1em] opacity-50" />
                       <input 
                         {...register("job")}
-                        defaultValue={userData.profile.job}
+                        defaultValue={query.data.profile.job}
                         type="text" 
                         required
                         placeholder="Должность" 
@@ -125,12 +155,12 @@ const ProfilePage = () => {
                 type="email" 
                 required
                 placeholder="Почта" 
-                defaultValue={userData.email}
+                defaultValue={query.data.email}
                 autoComplete="off"/>
               </label>
 
               <div className="card-actions justify-around w-full my-2">
-                <button className="btn btn-primary" type="submit">Сохранить</button>
+                <button className="btn btn-primary" type="submit" disabled={loading}>Сохранить</button>
               </div>
             </form>
           </div>

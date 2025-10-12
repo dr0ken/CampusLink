@@ -38,8 +38,6 @@ router.post(
 
   try 
   {
-
-    
     const errors = validationResult(req)
 
     if (!errors.isEmpty()) {
