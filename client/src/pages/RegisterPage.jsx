@@ -14,7 +14,7 @@ const RegisterPage = () => {
 
   useEffect(() => {
     if (auth.isAuthenticated) {
-      navigate('/authorized')
+      navigate('/vacancies')
       return
     }
   }, [auth])
@@ -31,9 +31,7 @@ const RegisterPage = () => {
   const {register, handleSubmit, watch} = useForm()
 
   const registerHandler = async (data) => {
-    console.log(JSON.stringify(data))
     try {
-      
       await request(
         '/api/auth/register',
         'POST',
@@ -55,7 +53,8 @@ const RegisterPage = () => {
       <div className="card w-[25rem] bg-base-100 shadow-xl">
         <div className="card-body items-center">
           <h2 className="card-title">Регистрация</h2>
-          <form onSubmit={handleSubmit(registerHandler)} className="items-center  w-full">
+          <form onSubmit={handleSubmit(registerHandler)} className="items-center w-full">
+            {/* role */}
             <div className="join my-1 w-full">
               <input 
                 {...register("role")}
@@ -71,6 +70,7 @@ const RegisterPage = () => {
                 value="employer"
                 aria-label="Работодатель" />
             </div>
+            {/* name */}
             <label className="grow input input-bordered my-1 w-full validator">
               <User className="h-[1em] opacity-50" />
               <input 
@@ -84,6 +84,7 @@ const RegisterPage = () => {
             {
               role == "student" && (
                 <div className="flex flex-col w-full">
+                  {/* group */}
                   <label className="input input-bordered my-1 w-full validator">
                     <Users className="h-[1em] opacity-50" />
                     <input 
@@ -99,6 +100,7 @@ const RegisterPage = () => {
             {
               role == "employer" && (
                 <div className="flex flex-col w-full">
+                  {/* employerType */}
                   <div className="join my-1 w-full">
                     <input 
                       {...register("employerType")}
@@ -122,6 +124,7 @@ const RegisterPage = () => {
             {
               (role == "employer" && employerType == "partner") && (
                 <div className="flex flex-col w-full">
+                  {/* organization */}
                   <label className="input input-bordered my-1 w-full validator">
                     <Building2 className="h-[1em] opacity-50" />
                     <input 
@@ -131,6 +134,7 @@ const RegisterPage = () => {
                       placeholder="Название организации" 
                     />
                   </label>
+                  {/* job */}
                   <label className="input input-bordered my-1 w-full validator">
                     <BriefcaseBusiness className="h-[1em] opacity-50" />
                     <input 
@@ -143,6 +147,7 @@ const RegisterPage = () => {
                 </div>
               )
             }
+            {/* email */}
             <label className="grow input input-bordered my-1 w-full validator">
               <Mail className="h-[1em] opacity-50" />
               <input 
@@ -153,6 +158,7 @@ const RegisterPage = () => {
                 autoComplete="on"
               />
             </label>
+            {/* password */}
             <label className="grow input input-bordered my-1 w-full validator">
               <KeyRound className="h-[1em] opacity-50" />
               <input 

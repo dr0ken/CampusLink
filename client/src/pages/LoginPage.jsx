@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useHttp } from "../hooks/http.hook";
 import { useEffect } from "react";
@@ -14,18 +14,10 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (auth.isAuthenticated) {
-      navigate('/authorized')
+      navigate('/vacancies')
       return
     }
   }, [auth])
-
-  const [form, setForm] = useState({
-    email: '', password: ''
-  })
-
-  const changeHandler = event => {
-    setForm({...form, [event.target.name]: event.target.value})
-  }
 
   const {loading, error, clearError, request} = useHttp()
 
@@ -36,54 +28,45 @@ const LoginPage = () => {
     }
   }, [error])
 
-  const loginHandler = async (event) => {
-    event.preventDefault();
+  const {register, handleSubmit, watch} = useForm()
+
+  const loginHandler = async (data) => {
     try {
-      const data = await request(
+      const userData = await request(
         '/api/auth/login',
         'POST',
-        {...form})
-      auth.login(data.token, data.userId)
+        data)
+      auth.login(userData.token, userData.userId)
     }
     catch (e) {}
   } 
-
 
   return (
     <div className="flex justify-center items-center flex-1">
       <div className="card w-96 bg-base-100 shadow-xl">
         <div className="card-body items-center">
           <h2 className="card-title">Вход</h2>
-          <form onSubmit={loginHandler} className="items-center  w-full">
+          <form onSubmit={handleSubmit(loginHandler)} className="items-center  w-full">
             <label className="grow input input-bordered my-1 w-full validator">
               <Mail className="h-[1em] opacity-50" />
               <input 
+              {...register("email")}
               type="email" 
               required
               placeholder="Почта" 
-              name="email"
-              onChange={changeHandler}
               autoComplete="on"/>
             </label>
             <label className="grow input input-bordered my-1 w-full validator">
               <KeyRound className="h-[1em] opacity-50" />
               <input 
+                {...register("password")}
                 type="password" 
                 required 
                 placeholder="Пароль"
-                name="password"
-                // minLength="8" 
-                // pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" 
-                onChange={changeHandler}
                 autoComplete="on"
-                title="Must be more than 8 characters, including number, lowercase letter, uppercase letter" />
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" 
+                title="Пароль должен содержать не менее 8 символов, включая 1 цифру, 1 строчную и 1 заглавную букву" />
             </label>
-            <p className="validator-hint hidden">
-              Must be more than 8 characters, including
-              <br/>At least one number
-              <br/>At least one lowercase letter
-              <br/>At least one uppercase letter
-            </p>
             <div className="card-actions justify-around w-full my-2">
               <button 
                 className="btn btn-primary grow"

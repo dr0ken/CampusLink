@@ -9,13 +9,6 @@ const HomePage = () => {
 
   const auth = useContext(AuthContext)
 
-  useEffect(() => {
-      if (auth.isAuthenticated) {
-        navigate('/authorized')
-        return
-      }
-    }, [auth])
-
   return (
     <div className="flex grow max-w-[100vw] items-center justify-between px-20">
       <div className="hero flex-col justify-center items-center">
@@ -27,8 +20,15 @@ const HomePage = () => {
             Найди работу, стажировку или исследовательский проект в своем кампусе.
           </p>
           <div className="w-full flex justify-end gap-2">
-            <button className="grow btn btn-primary btn-xl" onClick={ () => {navigate("/login") } }>Смотреть вакансии</button>
-            <button className="grow btn btn-primary btn-xl" onClick={ () => {navigate("/login") } }>Создать вакансию</button>
+            <button className="grow btn btn-primary btn-xl" onClick={ () => 
+              {
+                if (!auth.isAuthenticated)
+                  navigate("/login")
+                else 
+                  navigate("/vacancies")
+              }}>
+                Смотреть вакансии
+            </button>
           </div>
         </div>
       </div>

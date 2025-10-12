@@ -16,14 +16,14 @@ export const Navbar = () => {
   }
 
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-base-100 shadow-xs">
       <div className="flex-1">
-        <NavLink to="/" className="btn btn-ghost glass text-xl" viewTransition><Share2 />CampusLink</NavLink>
+        <NavLink to={(auth.isAuthenticated) ? "/vacancies":"/" } className="btn btn-ghost glass text-xl" viewTransition><Share2 />CampusLink</NavLink>
       </div>
       <div className="flex-none">
-        <ul>
-          <li className="btn btn-primary mx-2"><NavLink to="/authorized">Authorized</NavLink></li>
-          <button className="btn btn-secondary" onClick={logoutHandler}>Logout</button>
+        <ul className="flex gap-2">
+          <li><NavLink to="/profile" className="btn btn-primary">Профиль</NavLink></li>
+          <li><button className="btn btn-secondary" onClick={logoutHandler}>Выход</button></li>
         </ul>
       </div>
     </div>

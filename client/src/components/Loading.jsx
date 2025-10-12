@@ -1,10 +1,9 @@
 
 
-
-export const Loader = () => {
+export const Loading = () => {
 
   return (
-    <div className="flex justify-center items-center">
+    <div className="grow flex justify-center items-center">
       <span className="loading loading-spinner loading-lg"/>
     </div>
   )
