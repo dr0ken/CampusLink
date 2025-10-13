@@ -6,6 +6,32 @@ import auth from '../middleware/auth.js'
 
 const router = Router()
 
+
+// /api/vacancy/getAll
+router.get(
+  '/getAll',
+  [ auth ],
+  async (req, res) => {
+
+  try 
+  {
+    const vacancies = await Vacancy.find().populate({
+      path: 'creator',
+      select: '-password',
+      populate: {
+        path: 'profile',
+      }
+    })
+
+    res.json(vacancies)
+  }
+  catch (e) 
+  {
+    res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова'})
+  }
+})
+
+
 // /api/vacancy/create
 router.post(
   '/create',

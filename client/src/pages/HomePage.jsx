@@ -10,13 +10,13 @@ const HomePage = () => {
   const auth = useContext(AuthContext)
 
   return (
-    <div className="flex grow max-w-[100vw] items-center justify-between px-20">
+    <div className="flex grow max-w-[100vw] items-center justify-between px-4">
       <div className="hero flex-col justify-center items-center">
-        <div className="hero-content flex-col items-center gap-10 text-neutral text-center">
-          <h1 className="text-7xl font-bold text-shadow-xs">
+        <div className="hero-content flex-col items-start md:items-center gap-4 text-neutral text-left md:text-center">
+          <h1 className="text-4xl md:text-7xl font-bold text-shadow-xs">
             Все возможности<br /><span className="text-primary">У тебя в руках</span>
           </h1>
-          <p className="text-xl">
+          <p className="md:text-xl">
             Найди работу, стажировку или исследовательский проект в своем кампусе.
           </p>
           <div className="w-full flex justify-end gap-2">

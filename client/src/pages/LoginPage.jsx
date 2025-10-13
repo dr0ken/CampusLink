@@ -42,7 +42,7 @@ const LoginPage = () => {
   } 
 
   return (
-    <div className="flex justify-center items-center flex-1">
+    <div className="flex justify-center items-center flex-1 p-4">
       <div className="card w-96 bg-base-100 shadow-xl">
         <div className="card-body items-center">
           <h2 className="card-title">Вход</h2>
