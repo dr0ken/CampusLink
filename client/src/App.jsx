@@ -9,10 +9,8 @@ import { Loading } from "./components/Loading"
 import { Navbar } from "./components/Navbar"
 import RegisterPage from "./pages/RegisterPage"
 import ProfilePage from "./pages/ProfilePage"
-import {
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query'
+import VacancyPage from "./pages/VacancyPage"
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const App = () => {
 
@@ -37,6 +35,7 @@ const App = () => {
             <Route element={<ProtectedRoutes/>}>
               <Route path="/profile" exact element={<ProfilePage/>} />
               <Route path="/vacancies" exact element={<VacanciesPage/>} />
+              <Route path="/vacancy/:id" element={<VacancyPage />} />
             </Route>
             <Route path="*" element={<Navigate to="/"/>}/>
           </Routes>

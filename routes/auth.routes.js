@@ -10,7 +10,80 @@ const router = Router()
 const roles = ['employer', 'student']
 const employerTypes = ['partner', 'teacher']
 
-// /api/auth/register
+
+/**
+ * @swagger
+ * tags:
+ *  name: Auth
+ *  description: API для аутентификации пользователей
+ */
+
+/**
+ * @swagger
+ * /auth/register:
+ *   post:
+ *     summary: Регистрация нового пользователя
+ *     description: |
+ *       Создает нового пользователя с одной из ролей (student, employer).
+ *       Валидация полей зависит от выбранной роли:
+ *       - Для студента обязательна группа
+ *       - Для работодателя обязателен тип работодателя
+ *       - Для работодателя-партнера обязательны организация и должность
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *               - name
+ *               - role
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: user@example.com
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 description: Пароль должен содержать не менее 8 символов, включая 1 цифру, 1 строчную и 1 заглавную букву
+ *                 example: "Password123"
+ *               name:
+ *                 type: string
+ *                 minLength: 4
+ *                 example: "Иван Иванов"
+ *               role:
+ *                 type: string
+ *                 enum: [student, employer]
+ *                 description: Роль пользователя
+ *                 example: "student"
+ *               group:
+ *                 type: string
+ *                 description: Академическая группа (Обязательно для роли "student")
+ *                 example: "РИ-240000"
+ *               employerType:
+ *                 type: string
+ *                 description: Тип работодателя partner/teacher (Обязательно для роли "employer")
+ *                 example: "partner"
+ *               organization:
+ *                 type: string
+ *                 description: Организация (Обязательно для employerType "partner")
+ *                 example: "ООО Технологии"
+ *               job:
+ *                 type: string
+ *                 description: Должность (Обязательно для employerType "partner")
+ *                 example: "Менеджер по развитию"
+ *     responses:
+ *       201:
+ *         description: Пользователь успешно создан
+ *       400:
+ *         description: Ошибка валидации или пользователь уже существует
+ *       500:
+ *         description: Внутренняя ошибка сервера
+ */
 router.post(
   '/register', 
   [
@@ -96,7 +169,48 @@ router.post(
   }
 })
 
-// /api/auth/login
+/**
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     summary: Аутентификация пользователя
+ *     description: Проверяет учетные данные пользователя и возвращает JWT токен при успешной аутентификации
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: user@example.com
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 example: "Password123"
+ *     responses:
+ *       200:
+ *         description: Успешная аутентификация
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   description: JWT токен для авторизации
+ *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *       400:
+ *         description: Ошибка валидации или неверные учетные данные
+ *       500:
+ *         description: Внутренняя ошибка сервера
+ */
 router.post(
   '/login',
   [

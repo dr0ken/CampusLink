@@ -12,10 +12,12 @@ const schema = new Schema({
     pendingSubmissions: {
       type: [Schema.Types.ObjectId],
       ref: 'Submission',
+      default: []
     },
     confirmedSubmissions: {
       type: [Schema.Types.ObjectId],
-      ref: 'Submission'
+      ref: 'Submission',
+      default: []
     },
 })
 

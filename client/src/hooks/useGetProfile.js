@@ -22,7 +22,7 @@ export const useGetProfile = () =>
         null)
     } 
     catch (e) {
-      toast(e.message)
+      console.log(e.message)
       return null
     }
   }

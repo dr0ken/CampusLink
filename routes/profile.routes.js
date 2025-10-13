@@ -5,7 +5,43 @@ import { check, validationResult } from 'express-validator'
 
 const router = Router()
 
-// /api/profile/me
+/**
+ * @swagger
+ * tags:
+ *  name: Profile
+ *  description: API для получения/изменения профиля пользователя
+ */
+
+/**
+ * @swagger
+ * components:
+ *  securitySchemes:
+ *    AuthToken:
+ *      type: apiKey
+ *      in: header
+ *      name: x-auth-token 
+ *      description: 'Для авторизации необходимо передать JWT-токен в заголовке x-auth-token.'
+ */
+
+/**
+ * @swagger
+ * /profile/me:
+ *   get:
+ *     summary: Получение данных текущего пользователя
+ *     description: Возвращает полную информацию о текущем аутентифицированном пользователе (без пароля)
+ *     security:
+ *       - AuthToken: []
+ *     tags: [Profile]
+ *     responses:
+ *       200:
+ *         description: Данные пользователя успешно получены
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Внутренняя ошибка сервера
+ */
 router.get(
   '/me',
   auth,
@@ -23,7 +59,59 @@ router.get(
   }
 )
 
-// /api/profile/edit
+/**
+ * @swagger
+ * /profile/edit:
+ *   put:
+ *     summary: Обновление профиля пользователя
+ *     description: |
+ *       Обновляет основные данные профиля пользователя.
+ *       Валидация и доступные поля зависят от роли пользователя:
+ *       - Для студента можно обновить группу
+ *       - Для работодателя-партнера можно обновить организацию и должность
+ *     tags:
+ *       - Profile
+ *     security:
+ *       - AuthToken: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: updated@example.com
+ *               name:
+ *                 type: string
+ *                 minLength: 4
+ *                 example: Иванов Илья
+ *               group:
+ *                 type: string
+ *                 description: Доступно только для роли "student"
+ *                 example: РИ-240000
+ *               organization:
+ *                 type: string
+ *                 description: Доступно только для employerType "partner"
+ *                 example: ООО Технологии
+ *               job:
+ *                 type: string
+ *                 description: Доступно только для employerType "partner"
+ *                 example: Менеджер по развитию
+ *     responses:
+ *       200:
+ *         description: Профиль успешно обновлен
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Некорректные данные
+ *       500:
+ *         description: Внутренняя ошибка сервера
+ */
 router.put(
   '/edit',
   [

@@ -31,6 +31,36 @@ router.get(
   }
 })
 
+// /api/vacancy/get
+router.get(
+  '/get/:id',
+  [ auth ],
+  async (req, res) => {
+
+  try 
+  {
+    const id = req.params.id;
+
+    const vacancy = await Vacancy.findById(id).populate({
+      path: 'creator',
+      select: '-password',
+      populate: {
+        path: 'profile',
+      }
+    })
+
+    if (!vacancy) {
+      return res.status(404).json({message: "Вакансия не найдена"})
+    }
+
+    res.json(vacancy)
+  }
+  catch (e) 
+  {
+    res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова'})
+  }
+})
+
 
 // /api/vacancy/create
 router.post(
@@ -69,12 +99,14 @@ router.post(
       name: name,
       description: description,
       studentCount: studentCount,
-      creator: user.id,
-      pendingSubmissions: [],
-      confirmedSubmissions: []
+      creator: user.id
     })
 
     await vacancy.save()
+
+    user.profile.vacancies.push(vacancy)
+
+    await user.profile.save()
 
     return res.status(201).json({message: 'Вакансия создана'})
   }
@@ -105,8 +137,16 @@ router.delete(
     if (vacancy.creator != req.user.id) {
       return res.status(403).json({message: "У вас нет прав для удаления этой вакансии"})
     }
-    
+
+    const index = vacancy.creator.profile.vacancies.indexOf(vacancy.id);
+
+    if (index > -1) { 
+      vacancy.creator.profile.vacancies.splice(index, 1);
+    }
+
+    await vacancy.creator.profile.save()
     await Vacancy.findByIdAndDelete(id)
+    
 
     res.status(204)
   }

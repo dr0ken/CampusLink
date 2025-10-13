@@ -13,18 +13,18 @@ const ProfilePage = () => {
 
   const {register, handleSubmit} = useForm()
   
-  const {data, isPending} = useGetProfile();
+  const {data: user, isPending} = useGetProfile();
   const {loading, handleEditProfile} = useEditProfile();
 
-  if (isPending || !data) return <Loading />
+  if (isPending || !user) return <Loading />
 
   return (
     <div className="flex grow max-w-[100vw] items-center justify-center p-4">
       <div className="card w-96 bg-base-100 shadow-xl">
         <div className="card-body items-center">
-          <h2 className="card-title">{data.profile.name}</h2>
+          <h2 className="card-title">{user.profile.name}</h2>
           
-          <Avatar user={data} size={'6em'}/>
+          <Avatar user={user} size={'6em'}/>
           
           <div className="w-full flex gap-10">
             
@@ -36,13 +36,13 @@ const ProfilePage = () => {
                 <input 
                   {...register("name")}
                   type="text" 
-                  defaultValue={data.profile.name}
+                  defaultValue={user.profile.name}
                   required
                   minLength={4}
                   placeholder="Имя" 
                 />
               </label>
-              { data.role == "student" && (
+              { user.role == "student" && (
                 <label className="floating-label input input-bordered my-1 w-full validator">
                   <span>Академическая группа</span>
                   <Users className="h-[1em] opacity-50" />
@@ -50,12 +50,12 @@ const ProfilePage = () => {
                     {...register("group")}
                     type="text" 
                     required
-                    defaultValue={data.profile.group}
+                    defaultValue={user.profile.group}
                     placeholder="Академическая группа" 
                   />
                 </label>
               )}
-              {(data.role == "employer" && data.profile.employerType == "partner") && (
+              {(user.role == "employer" && user.profile.employerType == "partner") && (
                   <div className="flex flex-col w-full">
                     {/* organization */}
                     <label className="floating-label input input-bordered my-1 w-full validator">
@@ -64,7 +64,7 @@ const ProfilePage = () => {
                       <input 
                         {...register("organization")}
                         type="text" 
-                        defaultValue={query.data.profile.organization}
+                        defaultValue={user.profile.organization}
                         required
                         placeholder="Название организации" 
                       />
@@ -75,7 +75,7 @@ const ProfilePage = () => {
                       <BriefcaseBusiness className="h-[1em] opacity-50" />
                       <input 
                         {...register("job")}
-                        defaultValue={query.data.profile.job}
+                        defaultValue={user.profile.job}
                         type="text" 
                         required
                         placeholder="Должность" 
@@ -92,7 +92,7 @@ const ProfilePage = () => {
                 type="email" 
                 required
                 placeholder="Почта" 
-                defaultValue={data.email}
+                defaultValue={user.email}
                 autoComplete="off"/>
               </label>
 

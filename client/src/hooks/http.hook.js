@@ -1,5 +1,6 @@
 import { useState, useCallback, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router";
 
 
 export const useHttp = () => {
@@ -7,6 +8,7 @@ export const useHttp = () => {
   const [error, setError] = useState(null)
 
   const auth = useContext(AuthContext)
+  const navigate = useNavigate()
 
   const request = useCallback(async (url, method="GET", body=null, headers={}) => {
     setLoading(true)
@@ -22,6 +24,7 @@ export const useHttp = () => {
 
       if (response.status == 401) {
         auth.logout()
+        navigate('/login')
         throw new Error('Пожалуйста, авторизуйтесь заново')
       }
 

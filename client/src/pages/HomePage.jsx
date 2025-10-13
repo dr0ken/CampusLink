@@ -13,7 +13,7 @@ const HomePage = () => {
     <div className="flex grow max-w-[100vw] items-center justify-between px-4">
       <div className="hero flex-col justify-center items-center">
         <div className="hero-content flex-col items-start md:items-center gap-4 text-neutral text-left md:text-center">
-          <h1 className="text-4xl md:text-7xl font-bold text-shadow-xs">
+          <h1 className="text-4xl md:text-7xl font-bold text-shadow-sm">
             Все возможности<br /><span className="text-primary">У тебя в руках</span>
           </h1>
           <p className="md:text-xl">

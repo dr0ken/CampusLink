@@ -36,15 +36,15 @@ const VacanciesPage = () => {
 
   const queryClient = useQueryClient()
 
-  const query = useQuery({ queryKey: ['vacancies'], queryFn: getVacancies })
+  const {data:vacancies, isPending, isSuccess} = useQuery({ queryKey: ['vacancies'], queryFn: getVacancies })
 
   return (
-    <div className="flex flex-col items-center h-full px-4">
+    <div className="flex flex-col items-center h-full px-4 grow">
       <h1 className="my-5 text-5xl font-bold text-primary text-center">Вакансии</h1>
-      {query.isPending && (<Loading />)}
-      {query.isSuccess && query.data && query.data.length > 0 && (
-        <div className="flex flex-col items-center gap-4 w-full overflow-auto">
-          {query.data.map(vacancy => (
+      {isPending && (<Loading />)}
+      {isSuccess && vacancies && vacancies.length > 0 && (
+        <div className="flex flex-col items-center gap-4 w-full overflow-auto grow">
+          {vacancies.map(vacancy => (
            <VacancyCard key={vacancy._id} vacancy={vacancy}/>
           ))}
         </div>
